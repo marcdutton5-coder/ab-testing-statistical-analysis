@@ -1,0 +1,195 @@
+import pandas as pd
+import numpy as np
+from statsmodels.stats.proportion import proportions_ztest
+import scipy.stats as stats
+from statsmodels.stats import power
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Read the dataset
+df = pd.read_csv(r"C:\Users\mdut0\Downloads\test.csv") #change your file location here
+
+# Aggregate the data to get total conversions and total sessions by each group
+group_data = df.groupby('group_id').agg(
+    conversions=('session_result', 'sum'), # Total conversions (sum of 1's)
+    sessions=('session_result', 'count')   # Total session counts
+).reset_index()
+
+# Display Total Conversions and Total Sessions
+print("Total Conversions and Total Sessions")
+print(group_data.to_string(index=False))  # Prevents printing the index column
+
+# Calculate the conversion rates for each group
+group_data['conversion_rate'] = group_data['conversions'] / group_data['sessions']
+
+# Display Conversion Rates
+print("Conversion Rate")
+print(group_data.to_string(index=False))  # Prevents printing the index column
+
+# Perform z-test to compare proportions
+zscore, pvalue = proportions_ztest(group_data['conversions'], group_data['sessions'])
+print('z-score = {:.3f}, p-value = {:.3f}'.format(zscore, pvalue))
+
+# Decision rule based on significance level (alpha)
+alpha = 0.05
+
+if pvalue < alpha:
+    print("Reject the null hypothesis: There is a significant difference between the groups.")
+else:
+    print("Fail to reject the null hypothesis: There is no significant difference between the groups.")
+
+# Calculate the confidence interval
+p1 = group_data.loc[group_data['group_id'] == 'A', 'conversion_rate'].values[0]
+p2 = group_data.loc[group_data['group_id'] == 'B', 'conversion_rate'].values[0]
+
+# Calculate the sample sizes
+n1 = group_data.loc[group_data['group_id'] == 'A', 'sessions'].values[0]
+n2 = group_data.loc[group_data['group_id'] == 'B', 'sessions'].values[0]
+
+# Calculate pooled proportion and standard error
+prop_pooled = (p1 * n1 + p2 * n2) / (n1 + n2)
+var = prop_pooled * (1 - prop_pooled) * (1 / n1 + 1 / n2)
+se = np.sqrt(var)
+
+# Calculate z critical value
+confidence = 0.95
+z_critical = stats.norm.ppf(1 - alpha / 2)  # For two-tailed test
+
+# Standard formula for confidence interval (point estimate +- z * SE)
+prop_diff = p1 - p2
+confint = prop_diff + np.array([-1, 1]) * z_critical * se
+print(f'Confidence interval for the difference in conversion rates: {confint}')
+
+# Calculate the effect size (Cohen's h)
+effect_size = 2 * (np.arcsin(np.sqrt(p1)) - np.arcsin(np.sqrt(p2)))
+
+# Perform power analysis using statsmodels
+analysis = power.NormalIndPower()
+
+# Calculate the power of the test using combined sample size (n1 + n2)
+total_sample_size = n1 + n2
+power_value = analysis.power(effect_size=effect_size, nobs1=total_sample_size, alpha=0.05)
+
+# Print effect size and power
+print(f"Effect Size (Cohen's h): {effect_size:.3f}")
+print(f"Power of the test: {power_value:.3f}")
+
+# Daily analysis for outlier detection
+daily_data = df.groupby(['date_id', 'group_id']).agg(
+    conversions=('session_result', 'sum'),
+    sessions=('session_result', 'count')
+).reset_index()
+
+daily_data['conversion_rate'] = daily_data['conversions'] / daily_data['sessions']
+
+# Create visualization
+plt.figure(figsize=(12, 8))
+
+# Plot daily conversion rates for group in ['A', 'B']:
+for group in ['A', 'B']:
+    group_daily = daily_data[daily_data['group_id'] == group]
+    plt.plot(group_daily['date_id'], group_daily['conversion_rate'], 
+            marker='o', label=f'Group {group}', linewidth=2, markersize=6)
+
+plt.xticks(rotation=45)
+plt.xlabel('Date')
+plt.ylabel('Conversion Rate')
+plt.title('Daily Conversion Rates by Group')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+
+# Identify outliers (conversion rates > 2 standard deviations from group mean)
+for group in ['A', 'B']:
+    group_daily = daily_data[daily_data['group_id'] == group]
+    mean_rate = group_daily['conversion_rate'].mean()
+    std_rate = group_daily['conversion_rate'].std()
+    
+    outliers = group_daily[abs(group_daily['conversion_rate'] - mean_rate) > 2 * std_rate]
+    
+    if len(outliers) > 0:
+        print(f"\nOutliers detected in Group {group}:")
+        for _, row in outliers.iterrows():
+            print(f"Date: {row['date_id']}, Conversion Rate: {row['conversion_rate']:.2%}, "
+                 f"Sessions: {row['sessions']}")
+            
+            # Highlight outlier on plot
+            plt.annotate(f'Outlier: {row["conversion_rate"]:.2%}', 
+                        xy=(row['date_id'], row['conversion_rate']),
+                        xytext=(10, 10), textcoords='offset points',
+                        bbox=dict(boxstyle='round,pad=0.3', facecolor='red', alpha=0.7),
+                        arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=0'))
+
+plt.show()
+
+# Check if sample size is sufficient to exclude outlier
+outlier_sessions = 0
+if len(outliers) > 0:
+    outlier_sessions = outliers['sessions'].sum()
+
+remaining_sessions = len(df) - outlier_sessions
+print(f"\nSample size analysis:")
+print(f"Total sessions: {len(df)}")
+print(f"Outlier sessions to exclude: {outlier_sessions}")
+print(f"Remaining sessions: {remaining_sessions}")
+
+# Check if remaining sample is still adequately powered
+if remaining_sessions > 1000:  # Arbitrary threshold for adequate sample
+    print("Sufficient sample size remains after excluding outlier.")
+    
+    # Exclude outlier and rerun analysis
+    print("\n" + "="*50)
+    print("ANALYSIS WITH OUTLIER EXCLUDED")
+    print("="*50)
+    
+    # Find the outlier date to exclude
+    outlier_date = outliers.iloc[0]['date_id']  # Take first outlier
+    df_clean = df[df['date_id'] != outlier_date]
+    
+    # Recalculate with cleaned data
+    group_data_clean = df_clean.groupby('group_id').agg(
+        conversions=('session_result', 'sum'),
+        sessions=('session_result', 'count')
+    ).reset_index()
+    
+    group_data_clean['conversion_rate'] = group_data_clean['conversions'] / group_data_clean['sessions']
+    
+    print("Cleaned Total Conversions and Total Sessions")
+    print(group_data_clean.to_string(index=False))
+    
+    # Recalculate statistical test
+    zscore_clean, pvalue_clean = proportions_ztest(group_data_clean['conversions'], group_data_clean['sessions'])
+    print('Cleaned z-score = {:.3f}, p-value = {:.3f}'.format(zscore_clean, pvalue_clean))
+    
+    if pvalue_clean < alpha:
+        print("Cleaned analysis: Reject the null hypothesis: There is a significant difference between the groups.")
+    else:
+        print("Cleaned analysis: Fail to reject the null hypothesis: There is no significant difference between the groups.")
+    
+    # Recalculate confidence interval
+    p1_clean = group_data_clean.loc[group_data_clean['group_id'] == 'A', 'conversion_rate'].values[0]
+    p2_clean = group_data_clean.loc[group_data_clean['group_id'] == 'B', 'conversion_rate'].values[0]
+    n1_clean = group_data_clean.loc[group_data_clean['group_id'] == 'A', 'sessions'].values[0]
+    n2_clean = group_data_clean.loc[group_data_clean['group_id'] == 'B', 'sessions'].values[0]
+    
+    prop_pooled_clean = (p1_clean * n1_clean + p2_clean * n2_clean) / (n1_clean + n2_clean)
+    var_clean = prop_pooled_clean * (1 - prop_pooled_clean) * (1 / n1_clean + 1 / n2_clean)
+    se_clean = np.sqrt(var_clean)
+    
+    prop_diff_clean = p1_clean - p2_clean
+    confint_clean = prop_diff_clean + np.array([-1, 1]) * z_critical * se_clean
+    print(f'Cleaned confidence interval for the difference in conversion rates: {confint_clean}')
+    
+    # Recalculate effect size and power
+    effect_size_clean = 2 * (np.arcsin(np.sqrt(p1_clean)) - np.arcsin(np.sqrt(p2_clean)))
+    total_sample_size_clean = n1_clean + n2_clean
+    power_value_clean = analysis.power(effect_size=effect_size_clean, nobs1=total_sample_size_clean, alpha=0.05)
+    
+    print(f"Cleaned Effect Size (Cohen's h): {effect_size_clean:.3f}")
+    print(f"Cleaned Power of the test: {power_value_clean:.3f}")
+    
+    print(f"\nComparison:")
+    print(f"Original p-value: {pvalue:.3f} vs Cleaned p-value: {pvalue_clean:.3f}")
+    print(f"Original effect size: {effect_size:.3f} vs Cleaned effect size: {effect_size_clean:.3f}")
+else:
+    print("Insufficient sample size remains after excluding outlier. Cannot perform reliable analysis.")
