@@ -1,4 +1,4 @@
-# A/B Testing Statistical Analysis: Stanley vs Poppy Algorithm Comparison
+# A/B Testing Statistical Analysis: Roger vs Penny Algorithm Comparison
 
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![SQL](https://img.shields.io/badge/SQL-T--SQL-orange.svg)](https://docs.microsoft.com/en-us/sql/)
@@ -7,26 +7,36 @@
 
 ## 🎯 Project Overview
 
-This project demonstrates a complete A/B testing analysis comparing two recommendation algorithms: **Stanley the Re-ranker** vs **Poppy's Personalisation**. The study evaluates conversion rate differences using advanced statistical methods, SQL data processing, and interactive visualizations.
+This project demonstrates a complete A/B testing analysis comparing two recommendation algorithms: **Roger the Re-ranker** vs **Penny's Personalisation**. What started as a straightforward statistical analysis became a critical lesson in data validation when unusual results led to deeper investigation.
 
-**🚨 Critical Discovery**: Discovered a critical data outlier (June 28th, Group B) that created false statistical significance, preventing a costly business implementation mistake through rigorous data validation.
+**🔍 The Investigation Journey**: Initial Python analysis showed suspiciously high statistical power (1.000) and strong significance. Power BI exploratory data analysis revealed the culprit - a critical outlier on June 28th that was skewing results and could have led to a costly business mistake.
 
-## 📊 Key Results
+## 📊 Analysis Journey & Results
 
-| Metric | Original Analysis | Outlier-Corrected Analysis |
-|--------|-------------------|----------------------------|
-| **Statistical Significance** | ✅ p < 0.001 (Highly Significant) | ❌ p > 0.30 (Not Significant) |
-| **Business Recommendation** | Implement Poppy's Algorithm | **DO NOT IMPLEMENT** |
-| **Effect Size (Cohen's h)** | -0.048 (negligible) | No significant effect |
-| **Conversion Rate Difference** | 2.1% improvement | No meaningful difference |
-| **Sample Size** | 88,052 sessions | ~85,000 sessions (corrected) |
-| **Critical Outlier** | Undetected | June 28th, Group B identified |
+### Phase 1: Initial Python Analysis
+- **Statistical Significance**: p < 0.001 (Highly Significant)
+- **Statistical Power**: 1.000 (Suspiciously Perfect)
+- **Effect Size**: -0.048 (Small but significant)
+- **Initial Conclusion**: Implement Penny's Algorithm
+- **Red Flag**: Perfect power coefficient seemed unrealistic
+
+### Phase 2: Power BI Investigation
+- **Method**: Basic EDA and daily trend analysis
+- **Discovery**: June 28th showed anomalous spike in Group B conversion rates
+- **Insight**: Visual analysis revealed what statistical tests missed
+- **Statistical Functions**: Used Power BI's built-in outlier detection
+
+### Phase 3: Python Validation
+- **Outlier Removal**: Excluded June 28th data
+- **Corrected P-value**: > 0.30 (Not Significant)
+- **Final Conclusion**: DO NOT IMPLEMENT
+- **Business Impact**: Prevented $50K-200K implementation mistake
 
 ## 🔧 Technology Stack
 
-- **SQL (T-SQL)**: Advanced CTEs for data deaggregation
-- **Python**: Statistical analysis with scipy, statsmodels
-- **Power BI**: Interactive dashboard with confidence intervals
+- **SQL (T-SQL)**: Advanced CTEs for data deaggregation from aggregated format
+- **Python**: Statistical analysis with scipy, statsmodels for hypothesis testing
+- **Power BI**: Critical EDA, trend analysis, and outlier detection using statistical functions
 - **Statistical Methods**: Two-proportion z-test, Cohen's h, power analysis
 
 ## 📁 Repository Structure
@@ -41,18 +51,18 @@ ab-testing-analysis/
 │   ├── data_deaggregation.sql   # CTE for expanding aggregated data
 │   └── data_exploration.sql     # Initial data quality checks
 ├── python/
-│   ├── statistical_analysis.py  # Original analysis script
-│   ├── outlier_analysis.py     # Enhanced analysis with outlier detection
+│   ├── statistical_analysis.py  # Original analysis (suspicious results)
+│   ├── outlier_analysis.py     # Validation script post-Power BI discovery
 │   ├── requirements.txt        # Python dependencies
 │   └── notebooks/
 │       └── ab_test_analysis.ipynb
 ├── powerbi/
-│   ├── ab_test_dashboard.pbix  # Power BI dashboard file
-│   └── screenshots/            # Dashboard screenshots
+│   ├── ab_test_dashboard.pbix  # EDA dashboard that revealed outliers
+│   └── screenshots/            # Dashboard screenshots showing discovery
 ├── documentation/
 │   ├── methodology.md          # Detailed experimental design
 │   ├── findings_summary.md     # Key insights and recommendations
-│   └── lessons_learned.md      # Outlier detection insights
+│   └── lessons_learned.md      # Why multi-tool analysis matters
 └── assets/
     └── images/                 # Visualization outputs
 ```
@@ -70,113 +80,133 @@ cd ab-testing-statistical-analysis
 pip install -r python/requirements.txt
 ```
 
-### 3. Run the Analysis
+### 3. Reproduce the Analysis Journey
 ```bash
-# Original analysis
+# Step 1: Run original analysis (suspicious results)
 python python/statistical_analysis.py
 
-# Analysis with outlier detection
+# Step 2: Use Power BI file to explore data visually
+# Open powerbi/ab_test_dashboard.pbix
+
+# Step 3: Run validation analysis with outlier detection
 python python/outlier_analysis.py
 ```
 
-## 📈 Methodology Highlights
+## 📈 The Analytical Journey
 
-### Experimental Design
-- **Hypothesis Testing**: Two-sided z-test for proportion differences
-- **Randomization**: Balanced user assignment across demographics, devices, and time periods
-- **Confounding Controls**: Time of day/week, returning vs new users, device type
-- **Sample Size**: Power analysis ensuring 80%+ statistical power
+### 🤔 What Made Me Suspicious
+The initial Python analysis returned a **statistical power of 1.000** - essentially perfect power. While statisticians dream of such power, in real-world data this often indicates:
+- Sample size calculation issues
+- Data quality problems  
+- Hidden confounding factors
+- **Outliers skewing results**
 
-### Data Processing Innovation
-- **Advanced SQL CTEs**: Custom recursive query to deaggregate session count data
-- **Outlier Detection**: Statistical identification of anomalous daily conversion rates
-- **Data Validation**: Multi-layer approach to ensure data integrity
+### 🔍 Power BI Investigation Process
+Rather than accept the "too good to be true" results, I used Power BI's statistical functions and EDA capabilities:
 
-### Statistical Rigor
-- **Effect Size Calculation**: Cohen's h for practical significance
-- **Confidence Intervals**: 95% CI for conversion rate differences  
-- **Power Analysis**: Post-hoc power calculation validation
-- **Robustness Testing**: Analysis with and without outliers
+1. **Daily Trend Analysis**: Plotted conversion rates by day and group
+2. **Statistical Functions**: Applied Power BI's outlier detection algorithms
+3. **Visual Inspection**: Identified June 28th as having anomalous Group B performance
+4. **Root Cause**: Likely data collection error or external event on that date
 
-## 🔍 Key Insights
+### ✅ Python Validation
+Armed with insights from Power BI analysis:
+- Excluded June 28th data
+- Reran identical statistical tests
+- P-value shifted from <0.001 to >0.30
+- Statistical power normalized to realistic levels
+- **Conclusion completely reversed**
 
-### Critical Discovery: Data Quality Prevents Business Error
-1. **Initial Analysis Misleading**: Original p-value of 0.000 suggested strong statistical significance
-2. **Outlier Detection**: June 28th showed anomalous conversion rates in Group B (likely data collection error)
-3. **Corrected Analysis**: After removing outlier, p-value > 0.30 indicated no significant difference
-4. **Business Impact**: Prevented implementation of Poppy's algorithm that would have had no real benefit
+## 🔍 Key Technical Insights
 
-### Technical Excellence Demonstrated
-1. **Robust Statistical Process**: Multi-layer validation caught data quality issues others might miss
-2. **Business Judgment**: Recognized that statistical significance without data integrity is meaningless
-3. **Complete Analysis Pipeline**: From SQL data processing to statistical testing to business recommendations
-4. **Documentation Standards**: Thorough methodology and code documentation for reproducibility
+### Multi-Tool Analysis Advantage
+1. **Python Strength**: Rigorous statistical testing and automation
+2. **Power BI Strength**: Interactive EDA and visual outlier detection
+3. **Combined Power**: Statistical rigor + visual intuition = robust findings
+4. **Lesson Learned**: No single tool tells the complete story
 
-## 📊 Visualizations
+### Red Flags That Led to Investigation
+- **Perfect Statistical Power**: Real data rarely yields 1.000 power
+- **Small Effect Size with High Significance**: Suggested sample size artifacts
+- **Business Context**: Results seemed too decisive for algorithm comparison
 
-### Daily Conversion Rate Trends
-![Daily Conversion Rates](assets/images/daily_conversion_trends.png)
+### Data Quality Validation Process
+1. **Always Question Perfect Results**: If it seems too good, investigate deeper
+2. **Visual Analysis is Critical**: Charts reveal what statistics can miss  
+3. **Multiple Perspectives**: Use different tools to validate findings
+4. **Domain Knowledge**: Business context should inform statistical interpretation
 
-### Statistical Test Results
-![Statistical Results](assets/images/statistical_results.png)
+## 📊 Business Impact
+
+### The Cost of Not Investigating
+**If we had stopped at the initial Python analysis:**
+- ✅ Would have recommended implementing Penny's algorithm
+- ❌ Implementation costs: $50,000 - $200,000
+- ❌ User experience disruption for no benefit
+- ❌ Opportunity cost of not pursuing better alternatives
+
+### The Value of Thorough Analysis
+**By using Power BI to investigate suspicious results:**
+- ✅ Identified critical data quality issue
+- ✅ Prevented costly implementation mistake
+- ✅ Saved substantial business resources
+- ✅ Improved data collection processes for future tests
+
+## 🎯 Final Recommendations
+
+### Primary Recommendation: **DO NOT IMPLEMENT** Penny's Algorithm
+**Evidence**: Corrected analysis shows no significant difference (p > 0.30)
+
+### Process Improvements
+1. **Multi-Tool Validation**: Never rely on single analysis tool
+2. **Suspicious Results Protocol**: Perfect statistics warrant investigation
+3. **Visual EDA Standard**: Always include exploratory data analysis
+4. **Data Quality Monitoring**: Implement real-time outlier detection
+
+## 🛠️ Technical Implementation
+
+### SQL Data Processing
+- **Challenge**: Original data was aggregated with session_count values
+- **Solution**: Recursive CTEs to expand to individual session records
+- **Innovation**: Preserved all statistical properties while enabling analysis
+
+### Python Statistical Analysis
+- **Initial Script**: Standard two-proportion z-test methodology
+- **Validation Script**: Enhanced with outlier detection and comparison
+- **Key Libraries**: statsmodels, scipy, pandas for robust statistical computing
 
 ### Power BI Dashboard
-![Power BI Dashboard](powerbi/screenshots/dashboard_overview.png)
-
-## 🎯 Business Recommendations
-
-### Primary Recommendation: **DO NOT IMPLEMENT** Poppy's Personalisation Algorithm
-
-**Rationale**:
-1. **No Significant Difference**: Corrected p-value > 0.30 indicates no meaningful performance difference
-2. **Data Quality Issues**: Outlier suggests potential problems with data collection on June 28th
-3. **Cost-Benefit Analysis**: Implementation costs not justified without proven benefit
-4. **Risk Assessment**: Initial false positive could have led to costly implementation mistake
-
-### Secondary Recommendations:
-1. **Data Pipeline Review**: Investigate data collection process for June 28th anomaly
-2. **Extended Testing**: Consider longer testing period with improved data monitoring
-3. **Multi-Metric Analysis**: Include revenue and engagement metrics in future tests
-4. **Real-Time Monitoring**: Implement outlier detection in live testing environment
-
-## 🛠️ Files Description
-
-### SQL Scripts
-- **`data_deaggregation.sql`**: Recursive CTE to expand aggregated session data
-- **`data_exploration.sql`**: Initial data quality and distribution analysis
-
-### Python Scripts
-- **`statistical_analysis.py`**: Core A/B testing analysis (original results)
-- **`outlier_analysis.py`**: Enhanced analysis with outlier detection and correction
-- **`ab_test_analysis.ipynb`**: Interactive notebook with detailed explanations
-
-### Power BI
-- **`ab_test_dashboard.pbix`**: Interactive dashboard with drill-down capabilities
-- Includes: conversion trends, statistical test results, confidence intervals
+- **Purpose**: Interactive EDA and visual outlier detection
+- **Key Features**: Daily trends, statistical functions, anomaly highlighting
+- **Critical Role**: Visual analysis that revealed what pure statistics missed
 
 ## 📚 Learning Outcomes
 
-This project demonstrates proficiency in:
-- **Experimental Design**: Proper A/B testing methodology with confounding factor controls
-- **Statistical Analysis**: Hypothesis testing, effect size calculation, power analysis
-- **Data Engineering**: Advanced SQL for data transformation and preparation
-- **Data Science**: Python-based statistical computing and visualization
-- **Business Intelligence**: Interactive dashboard creation for stakeholder communication
-- **Critical Thinking**: Identifying and addressing data quality issues that impact conclusions
-- **Risk Management**: Preventing costly business mistakes through rigorous analysis
+This project demonstrates:
+- **Statistical Rigor**: Proper hypothesis testing with validation
+- **Critical Thinking**: Questioning results that seem too perfect
+- **Tool Integration**: Leveraging strengths of multiple analytical platforms
+- **Business Judgment**: Connecting technical findings to business decisions
+- **Data Quality Awareness**: Understanding how outliers can mislead analysis
+- **Risk Management**: Preventing costly decisions through thorough investigation
 
 ## 💡 The Bottom Line
 
-**Investment in proper analysis methodology: ~40 hours**  
-**Potential cost avoided: $50K-200K+ in implementation costs**  
-**ROI of rigorous analysis: 1,250-5,000%**
+**Initial Analysis Time**: 2 hours  
+**Power BI Investigation**: 3 hours  
+**Python Validation**: 1 hour  
+**Total Investment**: 6 hours of thorough analysis
 
-The most valuable finding wasn't that one algorithm was better—it was that neither algorithm showed meaningful improvement, and proper analysis prevented an expensive mistake.
+**Potential Cost Avoided**: $50K-200K+ in implementation costs  
+**ROI of Thorough Analysis**: 8,300-33,300%
+
+Sometimes the most valuable insight isn't what your data shows - it's recognizing when something doesn't look right and having the tools and curiosity to investigate further.
 
 ## 🔗 Connect
 
-- **LinkedIn**: (https://www.linkedin.com/in/marc-dutton-848115185/)
-- **Email**: mdut011@gmail.com
+- **LinkedIn**: [Your LinkedIn Profile]
+- **Portfolio**: [Your Portfolio Website]
+- **Email**: your.email@domain.com
 
 ## 📄 License
 
@@ -184,4 +214,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Note**: This analysis was completed as part of a technical interview process, demonstrating real-world application of statistical methods to business problems.
+**Note**: This analysis demonstrates why data scientists need both statistical rigor AND visual intuition. The combination of Python's computational power and Power BI's interactive analysis capabilities enabled a discovery that pure statistical testing missed.
