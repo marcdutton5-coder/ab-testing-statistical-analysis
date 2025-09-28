@@ -1,4 +1,4 @@
-# A/B Testing Statistical Analysis: Roger vs Penny Algorithm Comparison
+# A/B Testing Statistical Analysis: Stanley vs Poppy Algorithm Comparison
 
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![SQL](https://img.shields.io/badge/SQL-T--SQL-orange.svg)](https://docs.microsoft.com/en-us/sql/)
@@ -7,7 +7,7 @@
 
 ## 🎯 Project Overview
 
-This project demonstrates a complete A/B testing analysis comparing two recommendation algorithms: **Roger the Re-ranker** vs **Penny's Personalisation**. The study evaluates conversion rate differences using advanced statistical methods, SQL data processing, and interactive visualizations.
+This project demonstrates a complete A/B testing analysis comparing two recommendation algorithms: **Stanley the Re-ranker** vs **Poppy's Personalisation**. The study evaluates conversion rate differences using advanced statistical methods, SQL data processing, and interactive visualizations.
 
 **🚨 Critical Discovery**: Discovered a critical data outlier (June 28th, Group B) that created false statistical significance, preventing a costly business implementation mistake through rigorous data validation.
 
@@ -16,7 +16,7 @@ This project demonstrates a complete A/B testing analysis comparing two recommen
 | Metric | Original Analysis | Outlier-Corrected Analysis |
 |--------|-------------------|----------------------------|
 | **Statistical Significance** | ✅ p < 0.001 (Highly Significant) | ❌ p > 0.30 (Not Significant) |
-| **Business Recommendation** | Implement Penny's Algorithm | **DO NOT IMPLEMENT** |
+| **Business Recommendation** | Implement Poppy's Algorithm | **DO NOT IMPLEMENT** |
 | **Effect Size (Cohen's h)** | -0.048 (negligible) | No significant effect |
 | **Conversion Rate Difference** | 2.1% improvement | No meaningful difference |
 | **Sample Size** | 88,052 sessions | ~85,000 sessions (corrected) |
@@ -104,7 +104,7 @@ python python/outlier_analysis.py
 1. **Initial Analysis Misleading**: Original p-value of 0.000 suggested strong statistical significance
 2. **Outlier Detection**: June 28th showed anomalous conversion rates in Group B (likely data collection error)
 3. **Corrected Analysis**: After removing outlier, p-value > 0.30 indicated no significant difference
-4. **Business Impact**: Prevented implementation of Penny's algorithm that would have had no real benefit
+4. **Business Impact**: Prevented implementation of Poppy's algorithm that would have had no real benefit
 
 ### Technical Excellence Demonstrated
 1. **Robust Statistical Process**: Multi-layer validation caught data quality issues others might miss
@@ -125,7 +125,7 @@ python python/outlier_analysis.py
 
 ## 🎯 Business Recommendations
 
-### Primary Recommendation: **DO NOT IMPLEMENT** Penny's Personalisation Algorithm
+### Primary Recommendation: **DO NOT IMPLEMENT** Poppy's Personalisation Algorithm
 
 **Rationale**:
 1. **No Significant Difference**: Corrected p-value > 0.30 indicates no meaningful performance difference
