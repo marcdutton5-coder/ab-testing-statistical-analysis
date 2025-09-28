@@ -166,7 +166,7 @@ Armed with insights from Power BI analysis:
 
 ## 🎯 Final Recommendations
 
-### Primary Recommendation: **DO NOT IMPLEMENT** Penny's Algorithm
+### Primary Recommendation: **DO NOT IMPLEMENT** Poppy's Algorithm
 **Evidence**: Corrected analysis shows no significant difference (p > 0.30)
 
 ### Process Improvements
