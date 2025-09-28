@@ -1,0 +1,16 @@
+# Data Dictionary
+
+## Dataset: A/B Test Results
+
+| Column Name | Data Type | Description |
+|-------------|-----------|-------------|
+| date_id | Date | Date of the user session (YYYY-MM-DD format) |
+| group_id | String | Test group assignment ('A' = Roger Algorithm, 'B' = Penny Algorithm) |
+| session_result | Integer | Conversion outcome (1 = converted, 0 = did not convert) |
+
+## Data Notes
+- Original data contained aggregated session_count values
+- Data was deaggregated using SQL CTEs to create individual session records
+- Sample size: ~88,000 total sessions across both groups
+- Test period: June 2018
+- Critical outlier identified: June 28th, Group B
