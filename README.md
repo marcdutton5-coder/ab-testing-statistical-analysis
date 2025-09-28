@@ -204,10 +204,10 @@ This project demonstrates:
 
 ## 💡 The Bottom Line
 
-**Initial Analysis Time**: 2 hours  
-**Power BI Investigation**: 3 hours  
+**Initial Analysis Time**: 3 hours  
+**Power BI Investigation**: 4 hours  
 **Python Validation**: 1 hour  
-**Total Investment**: 6 hours of thorough analysis
+**Total Investment**: 8 hours of thorough analysis
 
 **Potential Cost Avoided**: $50K-200K+ in implementation costs  
 **ROI of Thorough Analysis**: 8,300-33,300%
@@ -231,4 +231,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Note**: This analysis demonstrates why data scientists need both statistical rigor AND visual intuition. The combination of Python's computational power and Power BI's interactive analysis capabilities enabled a discovery that pure statistical testing missed.
+**Note**: This analysis demonstrates why data scientists need both statistical rigor AND visual intuition given that there was a limited time-frame of surveying. The combination of Python's computational power and Power BI's interactive analysis capabilities enabled a discovery that pure statistical testing missed.
