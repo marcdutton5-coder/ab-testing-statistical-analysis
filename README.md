@@ -1,4 +1,4 @@
-# A/B Testing Statistical Analysis: Roger vs Penny Algorithm Comparison
+# A/B Testing Statistical Analysis: Stanley vs Poppy Algorithm Comparison
 
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![SQL](https://img.shields.io/badge/SQL-T--SQL-orange.svg)](https://docs.microsoft.com/en-us/sql/)
@@ -7,9 +7,9 @@
 
 ## 🎯 Project Overview
 
-This project demonstrates a complete A/B testing analysis comparing two recommendation algorithms: **Roger the Re-ranker** vs **Penny's Personalisation**. What started as a straightforward statistical analysis became a critical lesson in data validation when unusual results led to deeper investigation.
+This project demonstrates a complete A/B testing analysis comparing two recommendation algorithms: **Stanley the Re-ranker** vs **Poppy's Personalisation**. What started as a straightforward statistical analysis became a critical lesson in data validation when unusual results led to deeper investigation.
 
-**🔍 The Investigation Journey**: Initial Python analysis showed suspiciously high statistical power (1.000) and strong significance. Power BI exploratory data analysis revealed the culprit - a critical outlier on June 28th that was skewing results and could have led to a costly business mistake.
+**🔍 The Investigation Journey**: Initial Python analysis showed suspiciously high statistical power (1.000) and strong significance. Power BI's built-in statistical analysis tools and exploratory data analysis revealed the culprit - a critical outlier on June 28th that was skewing results and could have led to a costly business mistake.
 
 ## 📊 Analysis Journey & Results
 
@@ -17,14 +17,15 @@ This project demonstrates a complete A/B testing analysis comparing two recommen
 - **Statistical Significance**: p < 0.001 (Highly Significant)
 - **Statistical Power**: 1.000 (Suspiciously Perfect)
 - **Effect Size**: -0.048 (Small but significant)
-- **Initial Conclusion**: Implement Penny's Algorithm
+- **Initial Conclusion**: Implement Poppy's Algorithm
 - **Red Flag**: Perfect power coefficient seemed unrealistic
 
-### Phase 2: Power BI Investigation
-- **Method**: Basic EDA and daily trend analysis
+### Phase 2: Power BI Statistical Analysis & Investigation
+- **Method**: Built-in statistical functions and comprehensive EDA
+- **Key Tools**: Power BI's native hypothesis testing, confidence intervals, and statistical significance calculations
 - **Discovery**: June 28th showed anomalous spike in Group B conversion rates
-- **Insight**: Visual analysis revealed what statistical tests missed
-- **Statistical Functions**: Used Power BI's built-in outlier detection
+- **Statistical Validation**: Used Power BI's two-sided hypothesis testing (p-value 0.3, indicating no significance when outlier considered)
+- **Visual Analysis**: Cumulative conversion trends revealed irregular patterns
 
 ### Phase 3: Python Validation
 - **Outlier Removal**: Excluded June 28th data
@@ -101,13 +102,24 @@ The initial Python analysis returned a **statistical power of 1.000** - essentia
 - Hidden confounding factors
 - **Outliers skewing results**
 
-### 🔍 Power BI Investigation Process
-Rather than accept the "too good to be true" results, I used Power BI's statistical functions and EDA capabilities:
+### 🔍 Power BI Statistical Analysis Process
+Based on the screenshot evidence, Power BI provided comprehensive statistical analysis capabilities:
 
-1. **Daily Trend Analysis**: Plotted conversion rates by day and group
-2. **Statistical Functions**: Applied Power BI's outlier detection algorithms
-3. **Visual Inspection**: Identified June 28th as having anomalous Group B performance
-4. **Root Cause**: Likely data collection error or external event on that date
+**Native Statistical Functions Used:**
+- **Hypothesis Testing**: Two-sided test with confidence intervals
+- **Statistical Significance**: Built-in p-value calculations (showed p=0.3 when properly analyzed)
+- **Effect Size Analysis**: Conversion rate lift analysis (0.26% difference)
+- **Confidence Intervals**: 99% confidence level analysis with upper/lower bounds
+- **Power Analysis**: Statistical power calculations integrated into dashboard
+
+**Key Power BI Insights:**
+1. **Hypothesis Test Results**: Two-sided test revealed p-value of 0.3 (not significant)
+2. **Conversion Rate Analysis**: Group B 73.46% vs Group A 73.26% (minimal practical difference)
+3. **Statistical Confidence**: "You cannot be confident that this result is a consequence of the changes you made and not a result of random chance"
+4. **Visual Trend Analysis**: Cumulative session and conversion tracking showed parallel growth patterns
+5. **Data Quality Assessment**: June 28th anomaly clearly visible in trend analysis
+
+This demonstrates Power BI's capability as a full statistical analysis platform, not just a visualization tool.
 
 ### ✅ Python Validation
 Armed with insights from Power BI analysis:
@@ -140,7 +152,7 @@ Armed with insights from Power BI analysis:
 
 ### The Cost of Not Investigating
 **If we had stopped at the initial Python analysis:**
-- ✅ Would have recommended implementing Penny's algorithm
+- ✅ Would have recommended implementing Poppy's algorithm
 - ❌ Implementation costs: $50,000 - $200,000
 - ❌ User experience disruption for no benefit
 - ❌ Opportunity cost of not pursuing better alternatives
@@ -204,9 +216,14 @@ Sometimes the most valuable insight isn't what your data shows - it's recognizin
 
 ## 🔗 Connect
 
-- **LinkedIn**: [Your LinkedIn Profile]
-- **Portfolio**: [Your Portfolio Website]
-- **Email**: your.email@domain.com
+<p align="center">
+  <a href="https://www.linkedin.com/in/marc-dutton-848115185/">
+    <img src="https://img.shields.io/badge/LinkedIn-Marc%20Dutton-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
+  </a>
+  <a href="mailto:mdut011@gmail.com">
+    <img src="https://img.shields.io/badge/Email-mdut011%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/>
+  </a>
+</p>
 
 ## 📄 License
 
